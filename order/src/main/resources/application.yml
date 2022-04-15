@@ -1,0 +1,43 @@
+spring:
+  application:
+    name: order
+
+# Database properties
+  datasource:
+    url: jdbc:h2:mem:order
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+
+# Logging properties
+logging:
+  level:
+    de.flowwindustries: debug
+  file:
+    name: logs/order.log
+
+application:
+
+  # Outbox Settings
+  outbox:
+#    polling-delay: 10000 # 10 seconds
+#    polling-initial-delay: 10000 # 10 seconds
+    out-queue:
+      name: 'orderChangeQueue'
+
+    # Order Change Queue Settings
+    order-change:
+      queue-name: 'orderChangeQueue'
+    # User Change Queue Settings
+    user-change:
+      queue-name: 'userChangeQueue'
+    # Product Change Queue Settings
+    product-change:
+      queue-name: 'productChangeQueue'
+
+server:
+  port: 8080

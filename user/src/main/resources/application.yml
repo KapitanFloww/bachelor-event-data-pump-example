@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: user
+
+# Database properties
+  datasource:
+    url: jdbc:h2:mem:user
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+
+# Logging properties
+logging:
+  level:
+    de.flowwindustries: debug
+  file:
+    name: logs/user.log
+
+application:
+
+  # Outbox Settings
+  outbox:
+#    polling-delay: 10000 # 10 seconds
+#    polling-initial-delay: 10000 # 10 seconds
+    out-queue:
+      name: 'userChangeQueue'
+
+server:
+  port: 8082
+
+
+
+

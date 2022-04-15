@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: product
+
+# Database properties
+  datasource:
+    url: jdbc:h2:mem:product
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+
+# Logging properties
+logging:
+  level:
+    de.flowwindustries: debug
+  file:
+    name: logs/product.log
+
+
+application:
+
+  # Outbox Settings
+  outbox:
+#    polling-delay: 10000 # 10 seconds
+#    polling-initial-delay: 10000 # 10 seconds
+    out-queue:
+      name: 'productChangeQueue'
+
+server:
+  port: 8081
+
+
+
+
