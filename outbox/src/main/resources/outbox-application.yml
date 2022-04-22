@@ -1,4 +1,6 @@
 application:
   outbox:
-    polling-delay: 10000 # 10 seconds
-    polling-initial-delay: 10000 # 10 seconds
+    polling:
+      enabled: true
+      delay: 10000 # 10 seconds
+      initial-delay: 10000 # 10 seconds

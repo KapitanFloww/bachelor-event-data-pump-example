@@ -1,0 +1,6 @@
+application:
+  outbox:
+    polling:
+      enabled: false
+    out-queue:
+      name: 'TestOutQueue'

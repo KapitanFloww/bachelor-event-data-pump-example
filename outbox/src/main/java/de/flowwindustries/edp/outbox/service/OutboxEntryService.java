@@ -19,7 +19,7 @@ public interface OutboxEntryService {
      * @param payload
      * @return
      */
-    OutboxEntry createOutboxEntry(String aggregateId, EventType eventType, Object payload);
+    OutboxEntry createOutboxEntry(String aggregateId, EventType eventType, String payload);
 
     /**
      * Process an outbox entry. This will change the entries status to {@link OutboxEntryStatus#PROCESSED}.
@@ -39,4 +39,9 @@ public interface OutboxEntryService {
      * @return
      */
     Collection<OutboxEntry> findAll();
+
+    /**
+     * Clean-up the OUTBOX by deleting PROCESSED entries.
+     */
+    void deleteProcessed();
 }

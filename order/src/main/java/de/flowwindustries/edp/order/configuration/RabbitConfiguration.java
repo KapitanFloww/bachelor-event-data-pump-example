@@ -23,7 +23,7 @@ public class RabbitConfiguration {
 
     @Bean
     public Queue productStateChangeQueue() {
-        return new Queue(productQueue, false);
+        return new Queue(productQueue, true);
     }
 
     // User Change In-Queue
@@ -33,7 +33,7 @@ public class RabbitConfiguration {
 
     @Bean
     public Queue userStateChangeQueue() {
-        return new Queue(userQueue, false);
+        return new Queue(userQueue, true);
     }
 
     // Template Bean Configuration

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,11 +16,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-@EnableScheduling
 public class OutboxPollingPublisher {
 
     @Value("${application.outbox.out-queue.name}")
-    private String outboxQueue;
+    private String outboxQueueName;
 
     private final OutboxEntryService outboxEntryService;
     private final RabbitTemplate rabbitTemplate;
@@ -29,19 +29,28 @@ public class OutboxPollingPublisher {
      * Delay between polls can be set with {@code application.outbox.polling-delay} property (default: 10.000 = 10s).
      * Initial delay can be set with {@code application.outbox.polling-initial-delay} property (default: 10.000 = 10s).
      */
-    @Scheduled(fixedDelayString = "${application.outbox.polling-delay}", initialDelayString = "${application.outbox.polling-initial-delay}")
-    public void publishUnprocessedEvents() {
+    @Scheduled(fixedDelayString = "${application.outbox.polling.delay}", initialDelayString = "${application.outbox.polling.initial-delay}")
+    public void publishUnprocessedEntries() {
+        cleanOutbox();
+
         log.debug("Publishing all unprocessed entries");
         outboxEntryService.findUnprocessedOutboxEntries()
                 .forEach( entry -> {
                     log.debug("Publishing entryId: {} for aggregate: {}({})", entry.getEventId(), entry.getAggregateId(), entry.getEventType());
-                    rabbitTemplate.convertAndSend(outboxQueue, entry);
+                    rabbitTemplate.convertAndSend(outboxQueueName, entry);
                     outboxEntryService.processOutboxEntry(entry); 
                 });
     }
 
     @Bean
     public Queue outboxQueue() {
-        return new Queue(outboxQueue, false);
+        return new Queue(outboxQueueName, true);
+    }
+
+    /**
+     * Clean-Up the OUTBOX by deleting processed entries.
+     */
+    private void cleanOutbox() {
+        outboxEntryService.deleteProcessed();
     }
 }
