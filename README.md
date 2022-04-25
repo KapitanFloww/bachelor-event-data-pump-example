@@ -28,7 +28,7 @@ This can be done, for example, via asynchronous events (messaging).
 Every time an entity of a microservice changes, the microservice publishes a corresponding event that can be consumed by the other microservices.
 In this way, other microservices can always keep their data replication in Synchronization.
 
-![](../../latex/graphics/concept/pattern-concepts/event-data-pump/architecture_edited.jpg)
+![](architecture_edited.jpg)
 
 ## Implementation
 
@@ -64,10 +64,10 @@ _One the consuming side:_
 
 To ensure that the publishing of the event and the state change will be both done atomically, the _Transactional Outbox_ pattern is implemented too.
 
-![](../../latex/graphics/concept/pattern-concepts/event-data-pump/transactional-outbox_edited.jpg)
+![](transactional-outbox_edited.jpg)
 
 #### Class Diagram
 
 The following diagramm, shows the different classes and how they interact with each other.
 
-![](../../latex/graphics/implementation/class-diagram.png)
+![](class-diagram.png)
