@@ -30,8 +30,8 @@ public class UserController {
 
     /**
      * HTTP GET to get a user resource.
-     * @param identifier
-     * @return
+     * @param identifier unique identifier of the user to get
+     * @return the requested user
      */
     @GetMapping(value = "/{identifier}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> getUser(@PathVariable("identifier") String identifier) {
@@ -40,7 +40,7 @@ public class UserController {
 
     /**
      * HTTP GET all user resources.
-     * @return
+     * @return all requested users
      */
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<User>> getUsers() {
@@ -49,8 +49,8 @@ public class UserController {
 
     /**
      * HTTP POST to create a new user resource.
-     * @param userDTO
-     * @return
+     * @param userDTO data-transfer-object of containing details of the user to create
+     * @return the created and persisted user
      */
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> postUser(@RequestBody UserDTO userDTO) {
@@ -62,9 +62,9 @@ public class UserController {
 
     /**
      * HTTP PUT to update a user resource.
-     * @param identifier
-     * @param userDTO
-     * @return
+     * @param identifier the unique identifier of the user to update
+     * @param userDTO data-transfer-object containing the updated details
+     * @return the updated and persisted user
      */
     @PutMapping(value = "/{identifier}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> putUser(@PathVariable("identifier") String identifier,
@@ -75,11 +75,11 @@ public class UserController {
 
     /**
      * HTTP DELETE to delete a user resource.
-     * @param identifier
-     * @return
+     * @param identifier the unique identifier of the user to delete
+     * @return ResponseEntity#ok
      */
     @DeleteMapping(value = "/{identifier}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity deleteUser(@PathVariable("identifier") String identifier) {
+    public ResponseEntity<Void> deleteUser(@PathVariable("identifier") String identifier) {
         userService.deleteUser(identifier);
         return ResponseEntity.ok().build();
     }

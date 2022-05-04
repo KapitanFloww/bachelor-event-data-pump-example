@@ -18,6 +18,10 @@ public class ProductChangeListener extends AbstractChangeEventListener {
 
     private final ProductService productService;
 
+    /**
+     * Listen for events in ProductChangeQueue.
+     * @param in caught outbox-entries / events
+     */
     @Override
     @RabbitListener(queues = "${application.outbox.product-change.queue-name}")
     public void listenForOutboxEvent(OutboxEntry in) {

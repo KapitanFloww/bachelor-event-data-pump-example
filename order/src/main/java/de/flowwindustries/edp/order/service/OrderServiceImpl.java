@@ -34,8 +34,6 @@ public class OrderServiceImpl implements OrderService {
     /**
      * Outbox Entry Types
      */
-
-    private final ObjectMapper mapper;
     private final OrderRepository orderRepository;
     private final OutboxEntryService outboxEntryService;
     private final ProductService productService;
@@ -56,7 +54,7 @@ public class OrderServiceImpl implements OrderService {
         log.info("Created new order: {}", purchase);
 
         //Persist outbox entry
-        createOutboxEntry(purchase, EventType.CREATION);
+        outboxEntryService.createOutboxEntry(purchase.getIdentifier(), EventType.CREATION, purchase);
 
         return purchase;
     }
@@ -85,7 +83,7 @@ public class OrderServiceImpl implements OrderService {
         log.info("Updated order: {}", identifier);
 
         //Persist outbox entry
-        createOutboxEntry(purchase, EventType.UPDATE);
+        outboxEntryService.createOutboxEntry(purchase.getIdentifier(), EventType.UPDATE, purchase);
 
         return purchase;
     }
@@ -125,10 +123,5 @@ public class OrderServiceImpl implements OrderService {
                 .holder(holder)
                 .products(products)
                 .build();
-    }
-
-    private void createOutboxEntry(Purchase purchase, EventType eventType) {
-        JsonNode node = mapper.convertValue(purchase, JsonNode.class);
-        outboxEntryService.createOutboxEntry(purchase.getIdentifier(), eventType, node.toString());
     }
 }

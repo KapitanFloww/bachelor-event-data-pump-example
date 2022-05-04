@@ -12,27 +12,27 @@ public interface UserService {
 
     /**
      * Create or update a {@link User} for this {@link OutboxEntry}.
-     * @param entry
-     * @return
+     * @param entry {@link OutboxEntry} containing the user to create or update
      */
-    User putUser(OutboxEntry entry);
+    void putUser(OutboxEntry entry);
 
     /**
      * Return all persisted {@link User}s.
-     * @return
+     * @return all persisted users
      */
     Collection<User> findAll();
 
     /**
      * Delete the {@link User} associated to this {@link OutboxEntry}.
-     * @param entry
+     * @param entry {@link OutboxEntry} containing the identifier of the user to delete ({@link OutboxEntry#getAggregateId()})
      */
     void deleteUser(OutboxEntry entry);
 
     /**
-     * Get the order holder
-     * @param identifier
-     * @return
+     * Get the order holder.
+     * @param identifier identifier of the user to fetch
+     * @return the requested user
+     * @throws IllegalArgumentException if no user can be found with the given identifier
      */
-    User getUserSafe(String identifier);
+    User getUserSafe(String identifier) throws IllegalArgumentException;
 }

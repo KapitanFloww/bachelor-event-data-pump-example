@@ -1,7 +1,5 @@
 package de.flowwindustries.edp.product.services;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.flowwindustries.edp.outbox.domain.EventType;
 import de.flowwindustries.edp.outbox.service.OutboxEntryService;
 import de.flowwindustries.edp.product.controller.dto.ProductDTO;
@@ -24,8 +22,6 @@ import java.util.UUID;
 public class ProductServiceImpl implements ProductService {
 
     private static final String PRODUCT_NOT_FOUND = "Product with identifier %s not found";
-
-    private final ObjectMapper mapper;
     private final ProductRepository productRepository;
     private final OutboxEntryService outboxEntryService;
 
@@ -44,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
         log.info("Created new product: {}", product);
 
         //Persist outbox entry
-        createOutboxEntry(product, EventType.CREATION);
+        outboxEntryService.createOutboxEntry(product.getIdentifier(), EventType.CREATION, product);
 
         return product;
     }
@@ -74,7 +70,7 @@ public class ProductServiceImpl implements ProductService {
         log.info("Updated product: {}", product);
 
         //Persist outbox entry
-        createOutboxEntry(product, EventType.UPDATE);
+        outboxEntryService.createOutboxEntry(product.getIdentifier(), EventType.UPDATE, product);
 
         return product;
     }
@@ -93,10 +89,5 @@ public class ProductServiceImpl implements ProductService {
 
         //Persist outbox entry
         outboxEntryService.createOutboxEntry(identifier, EventType.DELETION, null);
-    }
-
-    private void createOutboxEntry(Product product, EventType eventType) {
-        JsonNode node = mapper.convertValue(product, JsonNode.class);
-        outboxEntryService.createOutboxEntry(product.getIdentifier(), eventType, node.toString());
     }
 }

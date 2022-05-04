@@ -13,15 +13,15 @@ import java.util.Optional;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
     /**
-     * Find user by identifier.
+     * Find product by identifier.
      * @param identifier
-     * @return
+     * @return the product wrapped in an {@link Optional} or {@link Optional#empty()} if no product is found for the given identifier
      */
     Optional<Product> findByIdentifier(String identifier);
 
     /**
-     * Delete user by identifier.
-     * @param identifier
+     * Delete product by identifier.
+     * @param identifier the unique identifier of the product to delete
      */
     void deleteByIdentifier(String identifier);
 }

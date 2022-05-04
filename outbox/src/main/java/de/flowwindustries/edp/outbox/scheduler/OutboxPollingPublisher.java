@@ -42,6 +42,10 @@ public class OutboxPollingPublisher {
                 });
     }
 
+    /**
+     * Initialize outgoing queue bean.
+     * @return the outgoing queue bean
+     */
     @Bean
     public Queue outboxQueue() {
         return new Queue(outboxQueueName, true);

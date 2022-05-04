@@ -18,6 +18,10 @@ public class UserChangeListener extends AbstractChangeEventListener {
 
     private final UserService userService;
 
+    /**
+     * Listen for events in UserChangeQueue.
+     * @param in caught outbox-entries / events
+     */
     @RabbitListener(queues = "${application.outbox.user-change.queue-name}")
     public void listenForOutboxEvent(OutboxEntry in) {
         super.listenForOutboxEvent(in);

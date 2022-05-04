@@ -33,6 +33,9 @@ public class OutboxEntryServiceTest {
 
     @Autowired
     private OutboxEntryService outboxEntryService;
+
+    @Autowired
+    private MockCrudServiceProxy proxyService;
     @Autowired
     private OutboxRepository outboxRepository;
 
@@ -49,7 +52,7 @@ public class OutboxEntryServiceTest {
         long size = outboxRepository.count();
 
         //WHEN
-        OutboxEntry entry = outboxEntryService.createOutboxEntry(TEST_UUID, EventType.CREATION, payload);
+        OutboxEntry entry = proxyService.createOutboxEntry(TEST_UUID, EventType.CREATION, payload);
 
         //THEN
         assertThat(outboxRepository.count()).isEqualTo(size + 1);
@@ -63,7 +66,7 @@ public class OutboxEntryServiceTest {
     @ValueSource(strings = SPACE)
     void createOutboxEntry_Should_ThrowIllegalArgumentException_When_InvalidAggregateId(String aggregateId) {
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> outboxEntryService.createOutboxEntry(aggregateId, EventType.CREATION, null))
+                .isThrownBy(() -> proxyService.createOutboxEntry(aggregateId, EventType.CREATION, null))
                 .withMessageContaining(AGGREGATE_ID_INVALID);
     }
 

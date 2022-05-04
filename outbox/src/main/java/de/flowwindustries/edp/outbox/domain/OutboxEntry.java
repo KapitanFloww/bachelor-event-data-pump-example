@@ -29,6 +29,9 @@ public class OutboxEntry implements Serializable {
 
     static final long serialVersionUID = 111L;
 
+    /**
+     * Database ID.
+     */
     @Id
     @JsonIgnore
     @Setter(AccessLevel.NONE)
@@ -37,18 +40,33 @@ public class OutboxEntry implements Serializable {
     private Long id;
 
     /**
-     * The unique messageId
+     * The unique messageId.
      */
     @Column(unique = true)
     private String eventId;
 
+    /**
+     * Processing status of the outbox entry.
+     */
     private OutboxEntryStatus outboxEntryStatus;
 
     /**
      * The id of the corresponding aggregate / business entity
      */
     private String aggregateId;
+
+    /**
+     * The event type that has occured.
+     */
     private EventType eventType;
+
+    /**
+     * The referenced entity or null.
+     */
     private String payload;
+
+    /**
+     * Creation timestamp.
+     */
     private Instant createdAt;
 }

@@ -31,8 +31,8 @@ public class OrderController {
 
     /**
      * HTTP GET to get a user resource.
-     * @param identifier
-     * @return
+     * @param identifier unique identifier of the order to get
+     * @return the order
      */
     @GetMapping(value = "/{identifier}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Purchase> getUser(@PathVariable("identifier") String identifier) {
@@ -41,7 +41,7 @@ public class OrderController {
 
     /**
      * HTTP GET all user resources.
-     * @return
+     * @return all persisted orders
      */
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<Purchase>> getOrders() {
@@ -50,8 +50,8 @@ public class OrderController {
 
     /**
      * HTTP POST to create a new user resource.
-     * @param orderDTO
-     * @return
+     * @param orderDTO data-transfer-object for order to create
+     * @return the created and persisted order
      */
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Purchase> postUser(@RequestBody OrderDTO orderDTO) {
@@ -63,9 +63,9 @@ public class OrderController {
 
     /**
      * HTTP PUT to update a user resource.
-     * @param identifier
-     * @param orderDTO
-     * @return
+     * @param identifier the unique identifier of the order to update
+     * @param orderDTO data-transfer-object containing the updated order details
+     * @return the updated order
      */
     @PutMapping(value = "/{identifier}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Purchase> putUser(@PathVariable("identifier") String identifier,
@@ -76,19 +76,19 @@ public class OrderController {
 
     /**
      * HTTP DELETE to delete a user resource.
-     * @param identifier
-     * @return
+     * @param identifier the unique identifier of the order to delete
+     * @return ResponseEntity#ok
      */
     @DeleteMapping(value = "/{identifier}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity deleteUser(@PathVariable("identifier") String identifier) {
+    public ResponseEntity<Void> deleteUser(@PathVariable("identifier") String identifier) {
         orderService.deleteOrder(identifier);
         return ResponseEntity.ok().build();
     }
 
     /**
      * HTTP GET the order aggregate containing aggregated data.
-     * @param identifier
-     * @return
+     * @param identifier the unique identifier of the aggregated order to get
+     * @return the aggregated order details
      */
     @GetMapping(value = "/aggregate/{identifier}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<OrderAggregate> getOrderAggregate(@PathVariable("identifier") String identifier) {

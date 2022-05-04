@@ -12,27 +12,27 @@ public interface ProductService {
 
     /**
      * Create or update a {@link Product} for this {@link OutboxEntry}.
-     * @param entry
-     * @return
+     * @param entry {@link OutboxEntry} containing the product to create or update
      */
-    Product putProduct(OutboxEntry entry);
+    void putProduct(OutboxEntry entry);
 
     /**
      * Return all persisted {@link Product}s.
-     * @return
+     * @return all persisted products
      */
     Collection<Product> findAll();
 
     /**
      * Delete the {@link Product} associated to this {@link OutboxEntry}.
-     * @param entry
+     * @param entry {@link OutboxEntry} containing the identifier of the product to delete ({@link OutboxEntry#getAggregateId()}
      */
     void deleteProduct(OutboxEntry entry);
 
     /**
-     * Get the product
-     * @param identifier
-     * @return
+     * Get the product.
+     * @param identifier identifier of the product to fetch
+     * @return the requested product
+     * @throws IllegalArgumentException if no product can be found with the given identifier
      */
-    Product getProductSafe(String identifier);
+    Product getProductSafe(String identifier) throws IllegalArgumentException;
 }

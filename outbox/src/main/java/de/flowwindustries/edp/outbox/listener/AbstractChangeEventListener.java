@@ -68,16 +68,19 @@ public abstract class AbstractChangeEventListener {
 
     /**
      * Override to specify how to handle an {@link EventType#CREATION} event.
+     * @return a {@link Consumer} that consumes and processes an {@link OutboxEntry} to create a data replica
      */
     protected abstract Consumer<OutboxEntry> handleCreationEvent();
 
     /**
      * Override to specify how to handle an {@link EventType#UPDATE} event.
+     * @return a {@link Consumer} that consumes and processes an {@link OutboxEntry} to update a data replica
      */
     protected abstract Consumer<OutboxEntry> handleUpdateEvent();
 
     /**
      * Override to specify how to handle an {@link EventType#DELETION} event.
+     * @return a {@link Consumer} that consumes and processes an {@link OutboxEntry} to delete a data replica
      */
     protected abstract Consumer<OutboxEntry> handleDeleteEvent();
 }

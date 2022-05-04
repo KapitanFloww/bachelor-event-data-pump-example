@@ -9,8 +9,24 @@ import lombok.Data;
  */
 @Data
 public class ProductDTO {
+
+    /**
+     * Product name.
+     */
     private String name;
+
+    /**
+     * Product category.
+     */
     private String category;
+
+    /**
+     * Product price.
+     */
     private Double price;
+
+    /**
+     * Product status.
+     */
     private Status status;
 }

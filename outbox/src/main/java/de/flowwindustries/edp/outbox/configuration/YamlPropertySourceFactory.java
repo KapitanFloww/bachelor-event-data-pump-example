@@ -9,10 +9,13 @@ import org.springframework.core.io.support.PropertySourceFactory;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * Factory to load custom yml configuration file {@code resources/outbox-application.yml}
+ */
 public class YamlPropertySourceFactory implements PropertySourceFactory {
 
     @Override
-    public PropertySource<?> createPropertySource(String name, EncodedResource encodedResource) throws IOException {
+    public PropertySource<?> createPropertySource(String name, EncodedResource encodedResource) {
         YamlPropertiesFactoryBean factory = new YamlPropertiesFactoryBean();
         factory.setResources(encodedResource.getResource());
 

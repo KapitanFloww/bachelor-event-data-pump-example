@@ -20,16 +20,19 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    public static final String INVALID_AGGREGATE_IDS = "Aggregate Ids do not match!";
+    public static final String USER_NOT_FOUND = "User %s not found";
+
     private final UserRepository userRepository;
     private final EventPayloadMapper mapper;
 
     @Override
     @Transactional
-    public User putUser(OutboxEntry entry) {
+    public void putUser(OutboxEntry entry) {
         //Map payload to order mappedUser
         User mappedUser = mapper.mapToUser(entry.getPayload());
         if(!entry.getAggregateId().equals(mappedUser.getIdentifier())) {
-            throw new IllegalStateException("Aggregate Ids do not match!");
+            throw new IllegalStateException(INVALID_AGGREGATE_IDS);
         }
 
         //If already saved - update the user
@@ -42,15 +45,14 @@ public class UserServiceImpl implements UserService {
             user.setMail(mappedUser.getMail());
 
             //Persist the updated user
-            log.debug("Updated user: {}", user);
             user = userRepository.save(user);
-            return user;
+            log.debug("Updated user: {}", user);
+            return;
         }
 
         //Save updated mappedUser
         mappedUser = userRepository.save(mappedUser);
         log.debug("Created user: {}", mappedUser);
-        return mappedUser;
     }
 
     @Override
@@ -67,8 +69,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserSafe(String identifier) {
+    public User getUserSafe(String identifier) throws IllegalArgumentException {
         return userRepository.findByIdentifier(identifier)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("User %s not found", identifier)));
+                .orElseThrow(() -> new IllegalArgumentException(String.format(USER_NOT_FOUND, identifier)));
     }
 }

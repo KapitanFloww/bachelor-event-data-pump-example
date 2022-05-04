@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.Optional;
 
+import static de.flowwindustries.edp.order.change.events.user.service.UserServiceImpl.INVALID_AGGREGATE_IDS;
+
 /**
  * Service implementation of {@link ProductService}.
  */
@@ -20,16 +22,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
+    public static final String PRODUCT_NOT_FOUND = "Product %s not found!";
+
     private final ProductRepository productRepository;
     private final EventPayloadMapper mapper;
 
     @Override
     @Transactional
-    public Product putProduct(OutboxEntry entry) {
+    public void putProduct(OutboxEntry entry) {
         //Map payload to order product
         Product product = mapper.mapToProduct(entry.getPayload());
         if(!entry.getAggregateId().equals(product.getIdentifier())) {
-            throw new IllegalStateException("Aggregate Ids do not match!");
+            throw new IllegalStateException(INVALID_AGGREGATE_IDS);
         }
 
         //If already saved - update the holder
@@ -43,15 +47,14 @@ public class ProductServiceImpl implements ProductService {
             persistedProduct.setCategory(product.getCategory());
 
             //Persist the updated order holder
-            log.debug("Updated product: {}", persistedProduct);
             persistedProduct = productRepository.save(persistedProduct);
-            return persistedProduct;
+            log.debug("Updated product: {}", persistedProduct);
+            return;
         }
 
         //Save updated product
         product = productRepository.save(product);
         log.debug("Created product: {}", product);
-        return product;
     }
 
     @Override
@@ -70,6 +73,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getProductSafe(String identifier) {
         return productRepository.findByIdentifier(identifier)
-                .orElseThrow(() -> new IllegalArgumentException(String.format("Product %s not found!", identifier)));
+                .orElseThrow(() -> new IllegalArgumentException(String.format(PRODUCT_NOT_FOUND, identifier)));
     }
 }

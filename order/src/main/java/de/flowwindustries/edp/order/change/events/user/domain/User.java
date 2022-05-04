@@ -13,12 +13,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
- * Representational view of user from userService inside the Order bounded context.
+ * User Replica Data-Structure.
  */
 @Data
 @Entity
 public class User {
 
+    /**
+     * Database ID.
+     */
     @Id
     @JsonIgnore
     @Getter(AccessLevel.NONE)
@@ -26,10 +29,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    /**
+     * User replica identifier.
+     */
     @Column(unique = true)
     private String identifier;
 
+    /**
+     * User name.
+     */
     private String name;
+
+    /**
+     * User mail.
+     */
     private String mail;
 
 

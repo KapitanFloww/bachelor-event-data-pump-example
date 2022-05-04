@@ -9,8 +9,24 @@ import lombok.Data;
  */
 @Data
 public class UserDTO {
+
+    /**
+     * User name.
+     */
     private String name;
+
+    /**
+     * User mail.
+     */
     private String mail;
+
+    /**
+     * User address.
+     */
     private String address;
+
+    /**
+     * User status.
+     */
     private Status status;
 }

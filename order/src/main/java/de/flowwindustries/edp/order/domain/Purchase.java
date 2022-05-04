@@ -1,6 +1,7 @@
 package de.flowwindustries.edp.order.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import de.flowwindustries.edp.outbox.domain.Identifiable;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Getter;
@@ -19,8 +20,11 @@ import java.util.List;
  */
 @Data
 @Entity
-public class Purchase {
+public class Purchase implements Identifiable {
 
+    /**
+     * Database ID.
+     */
     @Id
     @Setter(AccessLevel.NONE)
     @Getter(AccessLevel.NONE)
@@ -28,23 +32,29 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    /**
+     * Unique order identifier.
+     */
     @Column(unique = true)
     private String identifier;
 
+    /**
+     * Total price of an order.
+     */
     private Double price;
+
+    /**
+     * Current status of the order.
+     */
     private Status status;
 
     /**
-     * Relationships to order domains
-     */
-
-    /**
-     * Relationship to user domain. User identifier.
+     * Referenced user identifier.
      */
     private String holderId;
 
     /**
-     * Relationship to product domain. Product identifier.
+     * Referenced product identifiers.
      */
     @ElementCollection
     private List<String> productIds;

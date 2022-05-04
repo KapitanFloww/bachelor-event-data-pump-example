@@ -1,7 +1,5 @@
 package de.flowwindustries.edp.user.services;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.flowwindustries.edp.outbox.domain.EventType;
 import de.flowwindustries.edp.outbox.service.OutboxEntryService;
 import de.flowwindustries.edp.user.controller.dto.UserDTO;
@@ -24,8 +22,6 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private static final String USER_NOT_FOUND = "User with identifier %s not found";
-
-    private final ObjectMapper mapper;
     private final UserRepository userRepository;
     private final OutboxEntryService outboxEntryService;
 
@@ -44,7 +40,7 @@ public class UserServiceImpl implements UserService {
         log.info("Created new user: {}", user);
 
         //Persist outbox entry
-        createOutboxEntry(user, EventType.CREATION);
+        outboxEntryService.createOutboxEntry(user.getIdentifier(), EventType.CREATION, user);
 
         return user;
     }
@@ -73,7 +69,7 @@ public class UserServiceImpl implements UserService {
         log.info("Updated user: {}", user);
 
         //Persist outbox entry
-        createOutboxEntry(user, EventType.UPDATE);
+        outboxEntryService.createOutboxEntry(user.getIdentifier(), EventType.UPDATE, user);
 
         return user;
     }
@@ -92,10 +88,5 @@ public class UserServiceImpl implements UserService {
 
         //Persist outbox entry
         outboxEntryService.createOutboxEntry(identifier, EventType.DELETION, null);
-    }
-
-    private void createOutboxEntry(User user, EventType eventType) {
-        JsonNode node = mapper.convertValue(user, JsonNode.class);
-        outboxEntryService.createOutboxEntry(user.getIdentifier(), eventType, node.toString());
     }
 }

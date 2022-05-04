@@ -12,8 +12,23 @@ import java.util.List;
 @Data
 public class OrderDTO {
 
+    /**
+     * Order price.
+     */
     private Double price;
+
+    /**
+     * Order status.
+     */
     private Status status;
+
+    /**
+     * Referenced user identifier.
+     */
     private String holderId;
+
+    /**
+     * Referenced product identifiers.
+     */
     private List<String> productIds;
 }

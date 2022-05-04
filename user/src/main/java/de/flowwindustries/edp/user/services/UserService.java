@@ -12,37 +12,37 @@ public interface UserService {
 
     /**
      * Create a new user.
-     * @param userDTO
-     * @return
+     * @param userDTO data-transfer-object containing the user details
+     * @return the persisted user entity
      */
     User createUser(UserDTO userDTO);
 
     /**
-     * Get the user details for the given identifier
-     * @param identifier
-     * @return
-     * @throws IllegalArgumentException
+     * Get the user details for the given identifier.
+     * @param identifier unique identifier of the user to fetch
+     * @return the request user
+     * @throws IllegalArgumentException if no user is found for the given identifier
      */
     User getUser(String identifier) throws IllegalArgumentException;
 
     /**
-     * Update the user details for the given identifier
-     * @param identifier
-     * @param userDTO
-     * @return
-     * @throws IllegalArgumentException
+     * Update the user details for the given identifier.
+     * @param identifier unique identifier of the user to update
+     * @param userDTO data-transfer-object containing the updated details
+     * @return the updated user
+     * @throws IllegalArgumentException if no user is found for the given identifier
      */
     User updateUser(String identifier, UserDTO userDTO) throws IllegalArgumentException;
 
     /**
      * Get all users.
-     * @return
+     * @return all persisted users
      */
     Collection<User> getAllUsers();
 
     /**
-     * Delete user details
-     * @param identifier
+     * Delete user details.
+     * @param identifier unique identifier of the user to delete
      */
     void deleteUser(String identifier);
 }

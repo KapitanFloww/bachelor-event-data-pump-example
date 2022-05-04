@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class EventPayloadMapper {
 
+    public static final String JSON_MAPPING_ERROR = "Could not map JSON String: %s";
     private final ObjectMapper mapper;
 
     /**
@@ -34,7 +35,8 @@ public class EventPayloadMapper {
             user.setName(payload.get("name").asText());
             return user;
         } catch (JsonProcessingException ex) {
-            throw new IllegalArgumentException("Could not map JSON String: " + jsonPayload);
+            log.warn(ex.getMessage());
+            throw new IllegalArgumentException(String.format(JSON_MAPPING_ERROR, jsonPayload));
         }
     }
 
@@ -54,7 +56,8 @@ public class EventPayloadMapper {
             product.setName(payload.get("name").asText());
             return product;
         } catch (JsonProcessingException ex) {
-            throw new IllegalArgumentException("Unable to map JSON: " + jsonPayload);
+            log.warn(ex.getMessage());
+            throw new IllegalArgumentException(String.format(JSON_MAPPING_ERROR, jsonPayload));
         }
     }
 }

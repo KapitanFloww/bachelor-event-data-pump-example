@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collection;
 
+/**
+ * Debug REST-Controller to fetch all persisted product replicas.
+ */
 @RestController
 @RequestMapping("api/v1/debug/products")
 @RequiredArgsConstructor
@@ -19,13 +22,11 @@ public class ProductDebugController {
     private final ProductService productService;
 
     /**
-     * GET all persisted orderHolders
-     * @return
+     * GET all persisted product replicas.
+     * @return an {@link Collection} of all persisted product replicas
      */
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<Product>> getAll() {
         return ResponseEntity.ok(productService.findAll());
     }
-
-
 }

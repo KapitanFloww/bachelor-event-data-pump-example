@@ -13,14 +13,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     /**
      * Find {@link User} by given identifier.
-     * @param identifier
-     * @return
+     * @param identifier identifier of the user replica to get
+     * @return the user replica wrapped in an {@link Optional}
+     * or {@link Optional#empty()} if user replica does not exist
      */
     Optional<User> findByIdentifier(String identifier);
 
     /**
      * Delete {@link User} by given identifier.
-     * @param identifier
+     * @param identifier identifier of the user replica to delete
      */
     void deleteByIdentifier(String identifier);
 }

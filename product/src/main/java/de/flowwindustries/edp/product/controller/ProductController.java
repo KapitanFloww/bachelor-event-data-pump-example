@@ -30,8 +30,8 @@ public class ProductController {
 
     /**
      * HTTP GET to get a product resource.
-     * @param identifier
-     * @return
+     * @param identifier the unique identifier of the product to get
+     * @return the requested product
      */
     @GetMapping(value = "/{identifier}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Product> getProduct(@PathVariable("identifier") String identifier) {
@@ -40,7 +40,7 @@ public class ProductController {
 
     /**
      * HTTP GET all product resources.
-     * @return
+     * @return all persisted products
      */
     @GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<Product>> getProducts() {
@@ -49,8 +49,8 @@ public class ProductController {
 
     /**
      * HTTP POST to create a new product resource.
-     * @param productDTO
-     * @return
+     * @param productDTO data-transfer-object with the product details to create
+     * @return the created and persisted product entity
      */
     @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Product> postProduct(@RequestBody ProductDTO productDTO) {
@@ -62,9 +62,9 @@ public class ProductController {
 
     /**
      * HTTP PUT to update a product resource.
-     * @param identifier
-     * @param productDTO
-     * @return
+     * @param identifier the unique identifier of the product to update
+     * @param productDTO data-transfer-object with the product details to update
+     * @return the updated and persisted product entity
      */
     @PutMapping(value = "/{identifier}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Product> putProduct(@PathVariable("identifier") String identifier,
@@ -75,11 +75,11 @@ public class ProductController {
 
     /**
      * HTTP DELETE to delete a product resource.
-     * @param identifier
-     * @return
+     * @param identifier the unique identifier of the product to delete
+     * @return ResponseEntit#ok
      */
     @DeleteMapping(value = "/{identifier}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity deleteProduct(@PathVariable("identifier") String identifier) {
+    public ResponseEntity<Void> deleteProduct(@PathVariable("identifier") String identifier) {
         productService.deleteProduct(identifier);
         return ResponseEntity.ok().build();
     }

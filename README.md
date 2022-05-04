@@ -71,3 +71,63 @@ To ensure that the publishing of the event and the state change will be both don
 The following diagramm, shows the different classes and how they interact with each other.
 
 ![](class-diagram.png)
+
+## Usage of this Pattern
+
+The following steps must be performed in order to use the concept:
+
+### In the producing microservice
+1. Add the `outbox`-module to the class path of the microservice
+2. Inject the `OutboxEntryService` in all required service classes inside a microservice
+3. In a service class, simple call `OutboxEntryService#createOutboxEntry();` and provide the reqired parameters
+
+**Example: User-Creation with Outbox Implementation**
+```java
+@Service
+public class UserServiceImpl {
+    
+    @Autowired
+    private OutboxEntryService outboxEntryService;
+
+    @Transactional
+    public void createUser(UserDTO userDTO) {
+        User user = new User();
+        // ... Logic to assign and persist user ...
+        outboxEntryService.createOutboxEntry(user.getIdentifier(), EventType.CREATION, user);
+    }
+}
+```
+### In the consuming microservice
+1. Create a listener by extending the `AbstractChangeEventListener` class
+2. Override the abstract methods and provide your logic to handle the data replica
+3. Override `AbstractChangeEventListener#listenForOutboxEvent()` and annotate the method with `@RabbitListener` - use this to specify the queue name as well
+4. In the methods body, simply call `super.listenForOutboxEvent()` and provide it with the `in`-parameter
+
+**Example: User Listener**
+```java
+@Component
+public class UserChangeListener extends AbstractChangeEventListener {
+
+    private final MyService myService;
+    
+    @RabbitListener(queues = "<<Replace with Queue Name>>")
+    public void listenForOutboxEvent(OutboxEntry in) {
+        super.listenForOutboxEvent(in);
+    }
+
+    @Override
+    protected Consumer<OutboxEntry> handleCreationEvent() {
+        return myService::create;
+    }
+
+    @Override
+    protected Consumer<OutboxEntry> handleUpdateEvent() {
+        return myService::update;
+    }
+
+    @Override
+    protected Consumer<OutboxEntry> handleDeleteEvent() {
+        return myService::delete;
+    }
+}
+```
